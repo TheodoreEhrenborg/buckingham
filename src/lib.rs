@@ -3,3 +3,14 @@
 // Start with floats, then maybe polymorphic
 // Then need routines for +-/*
 
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        let result = add(2, 2);
+        assert_eq!(result, 4);
+    }
+}
