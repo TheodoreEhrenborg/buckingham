@@ -6,17 +6,24 @@ use std::ops::Add;
 #[derive(Debug, Clone, PartialEq)]
 struct Unit {
     x: f64,
-    upper: Vec<String>
+    upper: Vec<String>,
+    lower: Vec<String>
 }
 
 impl Add for Unit {
     type Output = Result<Self,String>;
 
     fn add(self, other: Self) -> Result<Self,String> {
-        Ok(Self {
-            x: self.x + other.x,
-            upper: vec![]
-        })
+        if self.upper == other.upper && self.lower == other.lower {
+            Ok(Self {
+                x: self.x + other.x,
+                upper: self.upper,
+                lower: self.lower,
+            })
+        }
+        else {
+            Err("Units don't match".to_string())
+        }
     }
 }
 
@@ -27,8 +34,8 @@ mod tests {
     #[test]
     fn it_works() {
         assert_eq!(
-            Unit { x: 1., upper: vec![] } + Unit { x: 2., upper: vec![] },
-            Ok(Unit { x: 3., upper: vec![] })
+            Unit { x: 1., upper: vec![], lower: vec![] } + Unit { x: 2., upper: vec![], lower: vec![] },
+            Ok(Unit { x: 3., upper: vec![] , lower: vec![]})
         );
     }
 }
