@@ -3,19 +3,19 @@
 // Start with floats, then maybe polymorphic
 // Then need routines for +-/*
 use std::ops::Add;
-#[derive(Debug, Copy, Clone, PartialEq)]
-struct Point {
-    x: i32,
-    y: i32,
+#[derive(Debug, Clone, PartialEq)]
+struct Unit {
+    x: f64,
+    upper: Vec<String>
 }
 
-impl Add for Point {
+impl Add for Unit {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
         Self {
             x: self.x + other.x,
-            y: self.y + other.y,
+            upper: vec![]
         }
     }
 }
@@ -27,8 +27,8 @@ mod tests {
     #[test]
     fn it_works() {
         assert_eq!(
-            Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
-            Point { x: 3, y: 3 }
+            Unit { x: 1., upper: vec![] } + Unit { x: 2., upper: vec![] },
+            Unit { x: 3., upper: vec![] }
         );
     }
 }
