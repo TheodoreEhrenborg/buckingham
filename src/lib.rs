@@ -3,22 +3,21 @@
 // Start with floats, then maybe polymorphic
 // Then need routines for +-/*
 use std::ops::Add;
+use std::collections::HashMap;
 #[derive(Debug, Clone, PartialEq)]
 struct Unit {
     x: f64,
-    upper: Vec<String>,
-    lower: Vec<String>
+    units: HashMap<String,i64>
 }
 
 impl Add for Unit {
     type Output = Result<Self,String>;
 
     fn add(self, other: Self) -> Result<Self,String> {
-        if self.upper == other.upper && self.lower == other.lower {
+        if self.units == other.units {
             Ok(Self {
                 x: self.x + other.x,
-                upper: self.upper,
-                lower: self.lower,
+                units: self.units,
             })
         }
         else {
