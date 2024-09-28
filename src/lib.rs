@@ -26,6 +26,14 @@ impl Add for Unit {
         }
     }
 }
+// How to combine two units
+// OK, I think I want each one to be a HashMap(str -> int)
+// How do I combine the hashmaps?
+// OK, get a set of the keys from each
+// Then take the union of that
+// Then iterate over the keys, taking the values (or 0) from each of the dictionaries,
+// and adding them
+// Finally, iterate over the hashmap and remove any with 0 value
 
 #[cfg(test)]
 mod tests {
