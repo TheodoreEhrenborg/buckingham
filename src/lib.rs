@@ -41,8 +41,8 @@ mod tests {
     #[test]
     fn it_works() {
         assert_eq!(
-            Unit { x: 1., upper: vec![], lower: vec![] } + Unit { x: 2., upper: vec![], lower: vec![] },
-            Ok(Unit { x: 3., upper: vec![] , lower: vec![]})
+            Unit { x: 1., units: HashMap::new() } + Unit { x: 2., units: HashMap::new() },
+            Ok(Unit { x: 3., units: HashMap::new()})
         );
     }
 }
