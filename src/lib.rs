@@ -4,6 +4,7 @@
 // Then need routines for +-/*
 use std::ops::Add;
 use std::collections::HashMap;
+use std::collections::HashSet;
 #[derive(Debug, Clone, PartialEq)]
 struct Unit {
     x: f64,
@@ -25,6 +26,20 @@ impl Add for Unit {
         }
     }
 }
+
+fn combine(units1: HashMap<String,i64>, units2: HashMap<String,i64>) -> HashMap<String,i64> {
+    let all_keys = units1.keys().collect::<HashSet<&String>>().union(&units2.keys().collect());
+    let mut result = HashMap::new();
+    for key in all_keys {
+        let new_value = units1.get(&key.to_string()).unwrap_or(&0) + units2.get(&key.to_string()).unwrap_or(&0);
+        result.insert(key.to_string(),new_value);
+    }
+    result
+
+
+
+}
+
 // How to combine two units
 // OK, I think I want each one to be a HashMap(str -> int)
 // How do I combine the hashmaps?
