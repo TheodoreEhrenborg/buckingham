@@ -28,7 +28,9 @@ impl Add for Unit {
 }
 
 fn combine(units1: HashMap<String,i64>, units2: HashMap<String,i64>) -> HashMap<String,i64> {
-    let all_keys = units1.keys().collect::<HashSet<&String>>().union(&units2.keys().collect());
+    let keys1 = units1.keys().collect::<HashSet<&String>>();
+    let keys2 = units2.keys().collect::<HashSet<&String>>();
+    let all_keys = keys1.union(&keys2);
     let mut result = HashMap::new();
     for key in all_keys {
         let new_value = units1.get(&key.to_string()).unwrap_or(&0) + units2.get(&key.to_string()).unwrap_or(&0);
