@@ -56,10 +56,29 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
+    fn basic_add() {
         assert_eq!(
-            Unit { x: 1., units: HashMap::new() } + Unit { x: 2., units: HashMap::new() },
-            Ok(Unit { x: 3., units: HashMap::new()})
+            Unit { x: 1., units: HashMap::from([("m".to_string(),1)]) } + Unit { x: 2., units: HashMap::from([("m".to_string(),1)]) },
+            Ok(Unit { x: 3., units: HashMap::from([("m".to_string(),1)])})
         );
+    }
+
+    #[test]
+    fn combine_works() {
+        assert_eq!(
+combine(
+    HashMap::from([
+    ("m".to_string(), 2),
+    ("s".to_string(), -2),
+]),
+    HashMap::from([
+    ("m".to_string(), 1),
+    ("s".to_string(), 1),
+])),
+    HashMap::from([
+    ("m".to_string(), 3),
+    ("s".to_string(), -1),
+]))
+
     }
 }
