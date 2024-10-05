@@ -48,6 +48,12 @@ fn combine(units1: HashMap<String, i64>, units2: HashMap<String, i64>) -> HashMa
 // and adding them
 // Finally, iterate over the hashmap and remove any with 0 value
 
+// How to parse:
+// Format:
+// Float space unit(^optional_i32) unit(^optional_i32) / unit(^optional_i32)
+// And the division part is optional
+// 4.5 m^2 kg / s GBP
+
 #[cfg(test)]
 mod tests {
     use super::*;
