@@ -2,9 +2,17 @@
 // Need to parse "3 m/s" to (3.0, ['m'], ["s"])
 // Start with floats, then maybe polymorphic
 // Then need routines for +-/*
+use nom::character::complete::alpha1;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::ops::Add;
+
+use nom::bytes::complete::tag;
+use nom::character::complete::i32;
+use nom::number::complete::f32;
+use nom::sequence::{delimited, separated_pair};
+use nom::IResult;
+
 #[derive(Debug, Clone, PartialEq)]
 struct Unit {
     x: f64,
@@ -37,6 +45,7 @@ fn combine(units1: HashMap<String, i64>, units2: HashMap<String, i64>) -> HashMa
         result.insert(key.to_string(), new_value);
     }
     result
+    // TODO Doesn't remove units with exponent 0 yet
 }
 
 // How to combine two units
@@ -53,6 +62,10 @@ fn combine(units1: HashMap<String, i64>, units2: HashMap<String, i64>) -> HashMa
 // Float space unit(^optional_i32) unit(^optional_i32) / unit(^optional_i32)
 // And the division part is optional
 // 4.5 m^2 kg / s GBP
+
+fn parse_unit_and_exp(input: &str) -> IResult<&str, (&str, i32)> {
+    separated_pair(alpha1, tag("^"), i32)(input)
+}
 
 #[cfg(test)]
 mod tests {
@@ -84,5 +97,11 @@ mod tests {
             ),
             HashMap::from([("m".to_string(), 3), ("s".to_string(), -1),])
         )
+    }
+    #[test]
+    fn unit_and_exp_works() {
+        let (remaining, parsed) = parse_unit_and_exp("meters^2").unwrap();
+        assert_eq!(parsed, ("meters", 2));
+        assert_eq!(remaining, "");
     }
 }
