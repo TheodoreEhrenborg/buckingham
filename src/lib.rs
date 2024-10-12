@@ -4,6 +4,7 @@
 // Then need routines for +-/*
 use nom::character::complete::alpha1;
 use std::collections::HashMap;
+use nom::branch::alt;
 use std::collections::HashSet;
 use std::ops::Add;
 
@@ -72,6 +73,14 @@ fn parse_unit_and_default_exp(input: &str) -> IResult<&str, (&str, i32)> {
     Ok((remaining, (unit_name, 1)))
 }
 
+
+fn parse_unit_and_maybe_exp(input: &str) -> IResult<&str, (&str, i32)> {
+    alt((
+        parse_unit_and_exp,
+        parse_unit_and_default_exp
+    ))(input)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -114,6 +123,16 @@ mod tests {
     fn unit_and_exp1_works() {
         let (remaining, parsed) = parse_unit_and_default_exp("meters").unwrap();
         assert_eq!(parsed, ("meters", 1));
+        assert_eq!(remaining, "");
+    }
+
+    #[test]
+    fn unit_and_exp_maybe_works() {
+        let (remaining, parsed) = parse_unit_and_maybe_exp("meters").unwrap();
+        assert_eq!(parsed, ("meters", 1));
+        assert_eq!(remaining, "");
+        let (remaining, parsed) = parse_unit_and_maybe_exp("meters^-4").unwrap();
+        assert_eq!(parsed, ("meters", -4));
         assert_eq!(remaining, "");
     }
 }
