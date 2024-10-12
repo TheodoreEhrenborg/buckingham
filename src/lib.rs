@@ -67,6 +67,11 @@ fn parse_unit_and_exp(input: &str) -> IResult<&str, (&str, i32)> {
     separated_pair(alpha1, tag("^"), i32)(input)
 }
 
+fn parse_unit_and_default_exp(input: &str) -> IResult<&str, (&str, i32)> {
+    let (remaining, unit_name) = alpha1(input)?;
+    Ok((remaining, (unit_name, 1)))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -102,6 +107,13 @@ mod tests {
     fn unit_and_exp_works() {
         let (remaining, parsed) = parse_unit_and_exp("meters^2").unwrap();
         assert_eq!(parsed, ("meters", 2));
+        assert_eq!(remaining, "");
+    }
+
+    #[test]
+    fn unit_and_exp1_works() {
+        let (remaining, parsed) = parse_unit_and_default_exp("meters").unwrap();
+        assert_eq!(parsed, ("meters", 1));
         assert_eq!(remaining, "");
     }
 }
