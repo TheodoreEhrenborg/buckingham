@@ -3,6 +3,9 @@
 // Start with floats, then maybe polymorphic
 // Then need routines for +-/*
 use nom::character::complete::alpha1;
+use nom::multi::many0;
+use nom::sequence::tuple;
+use nom::combinator::all_consuming;
 use std::collections::HashMap;
 use nom::branch::alt;
 use std::collections::HashSet;
@@ -10,7 +13,7 @@ use std::ops::Add;
 
 use nom::bytes::complete::tag;
 use nom::character::complete::i32;
-use nom::number::complete::f32;
+use nom::number::complete::float;
 use nom::sequence::{delimited, separated_pair};
 use nom::IResult;
 
@@ -64,6 +67,8 @@ fn combine(units1: HashMap<String, i64>, units2: HashMap<String, i64>) -> HashMa
 // And the division part is optional
 // 4.5 m^2 kg / s GBP
 
+// TODO What if the user specifies the same unit twice in the unparsed string?
+
 fn parse_unit_and_exp(input: &str) -> IResult<&str, (&str, i32)> {
     separated_pair(alpha1, tag("^"), i32)(input)
 }
@@ -79,6 +84,16 @@ fn parse_unit_and_maybe_exp(input: &str) -> IResult<&str, (&str, i32)> {
         parse_unit_and_exp,
         parse_unit_and_default_exp
     ))(input)
+}
+
+fn parse_full_expression(input: &str) -> IResult<&str, (f32,Vec<(&str, i32)>,)> {
+all_consuming(
+    tuple(
+(
+    float,
+    many0(parse_unit_and_maybe_exp)
+,)
+))(input)
 }
 
 #[cfg(test)]
@@ -133,6 +148,13 @@ mod tests {
         assert_eq!(remaining, "");
         let (remaining, parsed) = parse_unit_and_maybe_exp("meters^-4").unwrap();
         assert_eq!(parsed, ("meters", -4));
+        assert_eq!(remaining, "");
+    }
+
+    #[test]
+    fn parse_full_expression_works() {
+        let (remaining, parsed) = parse_full_expression("5meters^2 seconds").unwrap();
+        assert_eq!(parsed, (5.0, vec![("meters",2), ("seconds",1)]));
         assert_eq!(remaining, "");
     }
 }
