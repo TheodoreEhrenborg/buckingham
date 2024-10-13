@@ -4,8 +4,10 @@
 // Then need routines for +-/*
 use nom::branch::alt;
 use nom::character::complete::alpha1;
+use nom::character::complete::multispace1;
 use nom::combinator::all_consuming;
 use nom::multi::many0;
+use nom::sequence::preceded;
 use nom::sequence::tuple;
 use std::collections::HashMap;
 use std::collections::HashSet;
@@ -83,7 +85,10 @@ fn parse_unit_and_maybe_exp(input: &str) -> IResult<&str, (&str, i32)> {
 }
 
 fn parse_full_expression(input: &str) -> IResult<&str, (f32, Vec<(&str, i32)>)> {
-    all_consuming(tuple((float, many0(parse_unit_and_maybe_exp))))(input)
+    all_consuming(tuple((
+        float,
+        many0(preceded(multispace1, parse_unit_and_maybe_exp)),
+    )))(input)
 }
 
 #[cfg(test)]
@@ -143,7 +148,7 @@ mod tests {
 
     #[test]
     fn parse_full_expression_works() {
-        let (remaining, parsed) = parse_full_expression("5meters^2 seconds").unwrap();
+        let (remaining, parsed) = parse_full_expression("5 meters^2 seconds").unwrap();
         assert_eq!(parsed, (5.0, vec![("meters", 2), ("seconds", 1)]));
         assert_eq!(remaining, "");
     }
