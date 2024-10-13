@@ -2,12 +2,12 @@
 // Need to parse "3 m/s" to (3.0, ['m'], ["s"])
 // Start with floats, then maybe polymorphic
 // Then need routines for +-/*
+use nom::branch::alt;
 use nom::character::complete::alpha1;
+use nom::combinator::all_consuming;
 use nom::multi::many0;
 use nom::sequence::tuple;
-use nom::combinator::all_consuming;
 use std::collections::HashMap;
-use nom::branch::alt;
 use std::collections::HashSet;
 use std::ops::Add;
 
@@ -78,22 +78,12 @@ fn parse_unit_and_default_exp(input: &str) -> IResult<&str, (&str, i32)> {
     Ok((remaining, (unit_name, 1)))
 }
 
-
 fn parse_unit_and_maybe_exp(input: &str) -> IResult<&str, (&str, i32)> {
-    alt((
-        parse_unit_and_exp,
-        parse_unit_and_default_exp
-    ))(input)
+    alt((parse_unit_and_exp, parse_unit_and_default_exp))(input)
 }
 
-fn parse_full_expression(input: &str) -> IResult<&str, (f32,Vec<(&str, i32)>,)> {
-all_consuming(
-    tuple(
-(
-    float,
-    many0(parse_unit_and_maybe_exp)
-,)
-))(input)
+fn parse_full_expression(input: &str) -> IResult<&str, (f32, Vec<(&str, i32)>)> {
+    all_consuming(tuple((float, many0(parse_unit_and_maybe_exp))))(input)
 }
 
 #[cfg(test)]
@@ -154,7 +144,7 @@ mod tests {
     #[test]
     fn parse_full_expression_works() {
         let (remaining, parsed) = parse_full_expression("5meters^2 seconds").unwrap();
-        assert_eq!(parsed, (5.0, vec![("meters",2), ("seconds",1)]));
+        assert_eq!(parsed, (5.0, vec![("meters", 2), ("seconds", 1)]));
         assert_eq!(remaining, "");
     }
 }
