@@ -94,7 +94,7 @@ fn parse_full_expression(input: &str) -> IResult<&str, (f32, Vec<(&str, i32)>)> 
 fn build_unit(input: (f32, Vec<(&str, i32)>)) -> Unit {
     Unit {
         x: input.0,
-        units: input.1.into_iter().collect::<HashMap<_, _>>(),
+        units: input.1.into_iter().map(|(x,y)| (String::from(x), y)).collect::<HashMap<_, _>>(),
     }
 }
 
@@ -163,8 +163,12 @@ mod tests {
     #[test]
     fn parse_and_build() {
         let (remaining, parsed) = parse_full_expression("5 meters^2 seconds^-1").unwrap();
+        assert_eq!(remaining, "");
         let u = build_unit(parsed);
-        assert_eq!(u);
+        assert_eq!(u, Unit {
+                x: 5.,
+                units: HashMap::from([("m".to_string(), 1)])
+            });
 
     }
 }
