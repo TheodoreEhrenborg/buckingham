@@ -91,11 +91,11 @@ fn parse_full_expression(input: &str) -> IResult<&str, (f32, Vec<(&str, i32)>)> 
     )))(input)
 }
 
-fn build_unit(input : (f64, Vec<(String, i64)>) ) -> Unit {
-   Unit {
-                x: input.0,
-                units: input.1.into_iter().collect::<HashMap<_, _>>()
-            }
+fn build_unit(input: (f64, Vec<(String, i64)>)) -> Unit {
+    Unit {
+        x: input.0,
+        units: input.1.into_iter().collect::<HashMap<_, _>>(),
+    }
 }
 
 #[cfg(test)]
