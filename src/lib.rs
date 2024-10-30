@@ -21,8 +21,8 @@ use nom::IResult;
 
 #[derive(Debug, Clone, PartialEq)]
 struct Unit {
-    x: f64,
-    units: HashMap<String, i64>,
+    x: f32,
+    units: HashMap<String, i32>,
 }
 
 impl Add for Unit {
@@ -40,7 +40,7 @@ impl Add for Unit {
     }
 }
 
-fn combine(units1: HashMap<String, i64>, units2: HashMap<String, i64>) -> HashMap<String, i64> {
+fn combine(units1: HashMap<String, i32>, units2: HashMap<String, i32>) -> HashMap<String, i32> {
     let keys1 = units1.keys().collect::<HashSet<&String>>();
     let keys2 = units2.keys().collect::<HashSet<&String>>();
     let all_keys = keys1.union(&keys2);
@@ -91,7 +91,7 @@ fn parse_full_expression(input: &str) -> IResult<&str, (f32, Vec<(&str, i32)>)> 
     )))(input)
 }
 
-fn build_unit(input: (f64, Vec<(String, i64)>)) -> Unit {
+fn build_unit(input: (f32, Vec<(&str, i32)>)) -> Unit {
     Unit {
         x: input.0,
         units: input.1.into_iter().collect::<HashMap<_, _>>(),
