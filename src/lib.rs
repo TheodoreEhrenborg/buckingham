@@ -159,4 +159,12 @@ mod tests {
         assert_eq!(parsed, (5.0, vec![("meters", 2), ("seconds", 1)]));
         assert_eq!(remaining, "");
     }
+
+    #[test]
+    fn parse_and_build() {
+        let (remaining, parsed) = parse_full_expression("5 meters^2 seconds^-1").unwrap();
+        let u = build_unit(parsed);
+        assert_eq!(u);
+
+    }
 }
