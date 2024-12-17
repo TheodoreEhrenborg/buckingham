@@ -177,4 +177,9 @@ mod tests {
             }
         );
     }
+    #[test]
+    fn no_remaining() {
+        let result = parse_full_expression("5 meters^2 seconds^-1 ");
+        assert!(result.is_err());
+    }
 }
