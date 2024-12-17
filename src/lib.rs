@@ -102,6 +102,11 @@ fn build_unit(input: (f32, Vec<(&str, i32)>)) -> Unit {
     }
 }
 
+fn unit_from_str(input : &str) -> Result<Unit, Box<dyn std::error::Error + '_>> {
+    let (_, unpacked) = parse_full_expression(input)?;
+    Ok(build_unit(unpacked))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -181,5 +186,16 @@ mod tests {
     fn no_remaining() {
         let result = parse_full_expression("5 meters^2 seconds^-1 ");
         assert!(result.is_err());
+    }
+    #[test]
+    fn parse_and_convert() {
+        let u = unit_from_str("5 meters^2 seconds^-1").unwrap();
+        assert_eq!(
+            u,
+            Unit {
+                x: 5.,
+                units: HashMap::from([("meters".to_string(), 2), ("seconds".to_string(), -1)])
+            }
+        );
     }
 }
