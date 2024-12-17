@@ -167,7 +167,7 @@ mod tests {
         let u = build_unit(parsed);
         assert_eq!(u, Unit {
                 x: 5.,
-                units: HashMap::from([("m".to_string(), 1)])
+                units: HashMap::from([("meters".to_string(), 2), ("seconds".to_string(),-1)])
             });
 
     }
