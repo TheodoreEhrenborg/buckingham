@@ -21,7 +21,7 @@ use nom::sequence::{delimited, separated_pair};
 use nom::IResult;
 
 #[derive(Debug, Clone, PartialEq)]
-struct Unit {
+pub struct Unit {
     x: f32,
     units: HashMap<String, i32>,
 }
@@ -116,7 +116,7 @@ fn build_unit(input: (f32, Vec<(&str, i32)>)) -> Unit {
     }
 }
 
-fn unit_from_str(input: &str) -> Result<Unit, Box<dyn std::error::Error + '_>> {
+pub fn unit_from_str(input: &str) -> Result<Unit, Box<dyn std::error::Error + '_>> {
     let (_, unpacked) = parse_full_expression(input)?;
     Ok(build_unit(unpacked))
 }
