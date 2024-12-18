@@ -213,4 +213,11 @@ mod tests {
             }
         );
     }
+    #[test]
+    fn basic_mul() {
+        let u1 = unit_from_str("5 meters^2 seconds^-1").unwrap();
+        let u2 = unit_from_str("3 meters^-1 kg").unwrap();
+        let u3 = unit_from_str("15 kg^1 meters seconds^-1").unwrap();
+        assert_eq!(u1 * u2, u3);
+    }
 }
