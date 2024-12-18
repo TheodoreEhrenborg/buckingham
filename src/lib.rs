@@ -121,6 +121,8 @@ fn unit_from_str(input: &str) -> Result<Unit, Box<dyn std::error::Error + '_>> {
     Ok(build_unit(unpacked))
 }
 
+// TODO Support division?
+
 // TODO Test that default exponents work in the middle of a string
 #[cfg(test)]
 mod tests {
