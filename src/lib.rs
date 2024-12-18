@@ -12,6 +12,7 @@ use nom::sequence::tuple;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::ops::Add;
+use std::ops::Mul;
 
 use nom::bytes::complete::tag;
 use nom::character::complete::i32;
@@ -36,6 +37,19 @@ impl Add for Unit {
             })
         } else {
             Err("Units don't match".to_string())
+        }
+    }
+}
+
+impl Mul for Unit {
+    type Output = Self;
+
+    fn mul(self, rhs: Self) -> Self {
+        let new_x = self.x * rhs.x;
+        let new_units = combine(self.units, rhs.units);
+        Self {
+            x: new_x,
+            units: new_units,
         }
     }
 }
@@ -102,7 +116,7 @@ fn build_unit(input: (f32, Vec<(&str, i32)>)) -> Unit {
     }
 }
 
-fn unit_from_str(input : &str) -> Result<Unit, Box<dyn std::error::Error + '_>> {
+fn unit_from_str(input: &str) -> Result<Unit, Box<dyn std::error::Error + '_>> {
     let (_, unpacked) = parse_full_expression(input)?;
     Ok(build_unit(unpacked))
 }
