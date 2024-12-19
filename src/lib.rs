@@ -117,7 +117,7 @@ fn build_unit(input: (f32, Vec<(&str, i32)>)) -> Unit {
     }
 }
 
-pub fn unit_from_str(input: &str) -> Result<Unit, Box<dyn std::error::Error + '_>> {
+pub fn u(input: &str) -> Result<Unit, Box<dyn std::error::Error + '_>> {
     let (_, unpacked) = parse_full_expression(input)?;
     Ok(build_unit(unpacked))
 }
@@ -207,7 +207,7 @@ mod tests {
     }
     #[test]
     fn parse_and_convert() {
-        let u = unit_from_str("5 meters^2 seconds^-1").unwrap();
+        let u = u("5 meters^2 seconds^-1").unwrap();
         assert_eq!(
             u,
             Unit {
@@ -218,16 +218,16 @@ mod tests {
     }
     #[test]
     fn basic_mul() {
-        let u1 = unit_from_str("5 meters^2 seconds^-1").unwrap();
-        let u2 = unit_from_str("3 meters^-1 kg").unwrap();
-        let u3 = unit_from_str("15 kg^1 meters seconds^-1").unwrap();
+        let u1 = u("5 meters^2 seconds^-1").unwrap();
+        let u2 = u("3 meters^-1 kg").unwrap();
+        let u3 = u("15 kg^1 meters seconds^-1").unwrap();
         assert_eq!(u1 * u2, u3);
     }
     #[test]
     fn cancel() {
-        let u1 = unit_from_str("-5 meters^2 seconds^-1").unwrap();
-        let u2 = unit_from_str("4.1 meters^-2").unwrap();
-        let u3 = unit_from_str("-20.5 seconds^-1").unwrap();
+        let u1 = u("-5 meters^2 seconds^-1").unwrap();
+        let u2 = u("4.1 meters^-2").unwrap();
+        let u3 = u("-20.5 seconds^-1").unwrap();
         assert_eq!(u1 * u2, u3);
     }
 }
