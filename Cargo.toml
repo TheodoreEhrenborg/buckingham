@@ -2,6 +2,10 @@
 name = "buckingham"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "Arithmetic with units"
+repository = "https://github.com/TheodoreEhrenborg/buckingham"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

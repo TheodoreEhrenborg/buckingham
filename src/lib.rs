@@ -84,7 +84,6 @@ fn combine(units1: HashMap<String, i32>, units2: HashMap<String, i32>) -> HashMa
 // And the division part is optional
 // 4.5 m^2 kg / s GBP
 
-// TODO What if the user specifies the same unit twice in the unparsed string?
 
 fn parse_unit_and_exp(input: &str) -> IResult<&str, (&str, i32)> {
     separated_pair(alpha1, tag("^"), i32)(input)
@@ -122,7 +121,6 @@ pub fn u(input: &str) -> Result<Unit, Box<dyn std::error::Error + '_>> {
     Ok(build_unit(unpacked))
 }
 
-// TODO Support division?
 
 #[cfg(test)]
 mod tests {
