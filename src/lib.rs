@@ -62,10 +62,11 @@ fn combine(units1: HashMap<String, i32>, units2: HashMap<String, i32>) -> HashMa
     for key in all_keys {
         let new_value =
             units1.get(&key.to_string()).unwrap_or(&0) + units2.get(&key.to_string()).unwrap_or(&0);
-        result.insert(key.to_string(), new_value);
+        if new_value != 0 {
+            result.insert(key.to_string(), new_value);
+        }
     }
     result
-    // TODO Doesn't remove units with exponent 0 yet
 }
 
 // How to combine two units
@@ -220,6 +221,13 @@ mod tests {
         let u1 = unit_from_str("5 meters^2 seconds^-1").unwrap();
         let u2 = unit_from_str("3 meters^-1 kg").unwrap();
         let u3 = unit_from_str("15 kg^1 meters seconds^-1").unwrap();
+        assert_eq!(u1 * u2, u3);
+    }
+    #[test]
+    fn cancel() {
+        let u1 = unit_from_str("-5 meters^2 seconds^-1").unwrap();
+        let u2 = unit_from_str("4.1 meters^-2").unwrap();
+        let u3 = unit_from_str("-20.5 seconds^-1").unwrap();
         assert_eq!(u1 * u2, u3);
     }
 }
