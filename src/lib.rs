@@ -17,7 +17,7 @@ use std::ops::Mul;
 use nom::bytes::complete::tag;
 use nom::character::complete::i32;
 use nom::number::complete::float;
-use nom::sequence::{delimited, separated_pair};
+use nom::sequence::{separated_pair};
 use nom::IResult;
 
 #[derive(Debug, Clone, PartialEq)]
