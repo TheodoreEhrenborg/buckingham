@@ -124,7 +124,6 @@ pub fn u(input: &str) -> Result<Unit, Box<dyn std::error::Error + '_>> {
 
 // TODO Support division?
 
-// TODO Test that default exponents work in the middle of a string
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -229,5 +228,14 @@ mod tests {
         let u2 = u("4.1 meters^-2").unwrap();
         let u3 = u("-20.5 seconds^-1").unwrap();
         assert_eq!(u1 * u2, u3);
+    }
+    #[test]
+    fn test_defaults() {
+        let u1 = u("5 m s kg").unwrap();
+        let u2 = u("2 m^-1").unwrap();
+        let u3 = u("7 s^-1").unwrap();
+        let u4 = u("3 kg^-1").unwrap();
+        let u5 = u("210").unwrap();
+        assert_eq!(u1 * u2 * u3 * u4, u5);
     }
 }
